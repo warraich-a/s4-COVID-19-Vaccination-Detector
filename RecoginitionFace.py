@@ -44,16 +44,18 @@ print('Encoding complete')
 cap = cv2.VideoCapture(0)
 while True:
     success, img = cap.read()
+    fps = cap.get(cv2.CAP_PROP_FPS)
+    print(fps)
     # img=cv2.rotate(img, cv2.ROTATE_180)
     # to read each frame and decrease the size to 0.25 so that program runs fast
-    # imgS = cv2.resize(img, (0,0), None, 0.25, 0.25)
+    imgS = cv2.resize(img, (0,0), None, 0.25, 0.25)
     # # to get colors of the frames
-    # imgS = cv2.cvtColor(imgS, cv2.COLOR_RGB2BGR)
+    imgS = cv2.cvtColor(imgS, cv2.COLOR_RGB2BGR)
 
     # to get the current frame list by each frame, e.g. imgS is one frame
-    facesCurrentFrame = face_recognition.face_locations(img)
+    facesCurrentFrame = face_recognition.face_locations(imgS)
     #  to get the encoding of each frame
-    encodesCurrentFrame = face_recognition.face_encodings(img, facesCurrentFrame)
+    encodesCurrentFrame = face_recognition.face_encodings(imgS, facesCurrentFrame)
 
 #    to loop through both of the lists, that is why we use zip,
 #     encodeFace will grab from encodesCurrentFrame and faceLoc will grab from facesCurrentFrame one by one
@@ -80,7 +82,7 @@ while True:
             # is one instance in for loop
             y1,x2,y2,x1 = faceLoc
             # the reason why multiplying is because the original size of the frame was decreasd above but now I want increase it again
-            y1, x2, y2, x1 =y1,x2,y2,x1
+            y1, x2, y2, x1 = y1 * 4, x2 * 4, y2 * 4, x1 * 4
             cv2.rectangle(img,(x1,y1), (x2,y2),(255.155,100), 2)
             cv2.rectangle(img, (x1, y2-35), (x2, y2), (0.255, 100), cv2.FILLED)
             cv2.putText(img, name, (x1+6, y2-6),cv2.FONT_HERSHEY_COMPLEX, 1, (255,255,255),2)
